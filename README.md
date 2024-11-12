@@ -54,8 +54,34 @@ These datasets provide subreddit hyperlink networks, including temporal, sentime
 ---
 
 ## References
-- [Reddit Hyperlink Social Network Dataset](https://snap.stanford.edu/data/soc-RedditHyperlinks.html)  
+- [Reddit Hyperlink Social Network Dataset](https://snap.stanford.edu/data/soc-RedditHyperlinks.html)
+   - #### BibTeX Citation
+
+```bibtex
+@inproceedings{kumar2018community,
+  title={Community interaction and conflict on the web},
+  author={Kumar, Srijan and Hamilton, William L and Leskovec, Jure and Jurafsky, Dan},
+  booktitle={Proceedings of the 2018 World Wide Web Conference on World Wide Web},
+  pages={933--943},
+  year={2018},
+  organization={International World Wide Web Conferences Steering Committee}
+}
+```
+
 - [Reddit Threads Dataset](https://snap.stanford.edu/data/reddit_threads.html)
+   - #### BibTeX Citation
+
+```bibtex
+@inproceedings{karateclub,
+    title = {{Karate Club: An API Oriented Open-source Python Framework for Unsupervised Learning on Graphs}},
+    author = {Benedek Rozemberczki and Oliver Kiss and Rik Sarkar},
+    year = {2020},
+    pages = {3125–3132},
+    booktitle = {Proceedings of the 29th ACM International Conference on Information and Knowledge Management (CIKM '20)},
+    organization = {ACM},
+  }
+```
+
 - [NetworkX Documentation](https://networkx.org/)  
 - [Plotly Documentation](https://plotly.com/)  
 - [Pyvis Documentation](https://pyvis.readthedocs.io/)

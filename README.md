@@ -3,7 +3,7 @@
 **Course:** CSCI 4220 Social Networking and Informatics  
 
 ## Contributors
-- _Ernesto Rivera Dominguez_ -  [GitHub]()  [LinkedIn](https://www.linkedin.com/in/ernestoriv/)
+- _Ernesto Rivera Dominguez_ -  [GitHub](https://github.com/ErnestoRiDo)  [LinkedIn](https://www.linkedin.com/in/ernestoriv/)
 - _Brian Hagerty_ -  [GitHub](https://github.com/CashBandicoot)  [LinkedIn](https://www.linkedin.com/in/brian-hagerty-ba3699119/)
 - _Matthew Ward_ -  [GitHub](https://github.com/MWARDUNI)  [LinkedIn](https://www.linkedin.com/in/m4tth3w-w4rd/)
 

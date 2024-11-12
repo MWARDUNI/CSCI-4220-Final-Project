@@ -1,6 +1,6 @@
 # Interactive Reddit Network Visualization with Sentiment Filtering
 
-**Course:** CSCI 4220 Social Networking and Informatics  
+**Course:** CSCI 4220 Social Networking and Informatics  _University of Colorado_
 
 ## Contributors
 - _Ernesto Rivera Dominguez_ -  [GitHub](https://github.com/ErnestoRiDo)  [LinkedIn](https://www.linkedin.com/in/ernestoriv/)

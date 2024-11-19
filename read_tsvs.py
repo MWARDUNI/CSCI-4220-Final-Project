@@ -4,6 +4,7 @@ class TSVLoader():
     def __init__(self) -> None:
         self.prop_map = self._read_prop_map()
         self.test = False
+        self.use_props = False
         return None
 
     def _read_prop_map(self) -> list:
@@ -33,9 +34,18 @@ class TSVLoader():
                 props = line[5]
                 if source not in reddit.keys():
                     reddit[source] = []
-                reddit[source].append({"target":target, 'post_id':post_id, 'ts':ts, "sentiment":sentiment,
-                                    
-                                    "props":{self.prop_map[i]:x for i, x in enumerate(props.split(","))}})
+                if self.use_props:
+                    reddit[source].append({target: 
+                                            {"post_id": post_id, 
+                                            "ts": ts, 
+                                            "sentiment": sentiment,
+                                            "props": {self.prop_map[i]:x for i, x in enumerate(props.split(","))}}})
+                else:
+                        reddit[source].append({target: 
+                                            {"post_id": post_id, 
+                                            "ts": ts, 
+                                            "sentiment": sentiment}})
+                        
                 if self.test:
                     print(reddit)
                     break

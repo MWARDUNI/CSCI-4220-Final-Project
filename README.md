@@ -21,7 +21,7 @@ Our project aims to build an **interactive dashboard** to visualize subreddits w
 
 ## Motivation
 Reddit hosts a vast array of specialized subreddits that act as a melting pot of social interests and sentiments. This makes it an ideal platform for exploring community interactions. By visualizing subreddit connections and filtering by sentiment, we aim to offer:
-- A tool for professionals and researchers to identify trends and relationships across communities.
+- A tool for users to identify trends and relationships across vast communities.
 - A platform for casual users to explore common topics and emotional tones that bind or divide communities of interest.
 
 ---
@@ -50,6 +50,91 @@ These datasets provide subreddit hyperlink networks, including temporal, sentime
 - Develop an intuitive and interactive dashboard.
 - Enable filtering by sentiment, time, and network properties.
 - Provide insights into subreddit relationships and sentiment trends.
+
+---
+
+## Project Milestones
+### Step 1: Scope and Requirements
+- **Objectives**:
+  - Build network structure from datasets.
+  - Build an intuitive dashboard.
+  - Allow filtering by sentiment, time, and network properties.
+  - Provide actionable insights on subreddit relationships and sentiment trends.
+- **Identify Key Features**:
+  - Sentiment-based filtering.
+  - Network visualization (e.g., clusters, node importance).
+  - Temporal filtering for trends over time.
+
+### Step 2: Environment
+- **Development Environment**:
+  - Required libraries: `networkx`, `csv`, `plotly`, `pyvis`, `vaderSentiment`, `pandas`, `numpy`, others tbd...
+  - Recommend running in a python venv.
+
+### Step 3: Datasets
+- **Reddit Hyperlink Social Network Dataset**: Directed subreddit connections with sentiment and timestamps.
+
+### Step 4: Analyze and Preprocess Data
+- **Create Subreddit Graph**:
+  - Construct a directed graph using `networkx`.
+  - Add node and edge attributes:
+    - Nodes: subreddit embeddings, activity level, etc.
+    - Edges: sentiment, timestamp, link strength.
+- **Temporal Aggregation**:
+  - Organize data by time intervals for trend analysis.
+- **Sentiment Analysis**:
+  - Extract sentiment labels or compute new ones if necessary (e.g. Vader Sentiment Analysis)
+  - Aggregate sentiments per edge or node for better insights.
+
+### Step 5: Build Interactive Visualizations
+- **Network Visualization with Pyvis**:
+  - Use `networkx` to create the network structure.
+  - Integrate `pyvis` for an interactive, browser-based network display.
+  - Add features:
+    - Node size based on centrality or degree?
+    - Edge color/width for sentiment or weight?
+- **Trends and Filtering with Plotly**:
+  - Create interactive graphs (e.g., time-series sentiment trends)?
+  - Add dropdowns/sliders for filtering by sentiment, time, or network properties.
+- **Dashboard Integration**:
+  - Combine `pyvis` and `plotly` outputs into a single dashboard using `Streamlit`.
+
+### Step 6: Develop Analytical Tools
+- **Metrics**:
+  - Compute centrality metrics (e.g., degree, betweenness).
+  - Identify communities using clustering algorithms.
+- **Sentiment Trends**:
+  - Analyze sentiment trends within and across communities.
+
+### Step 7: Test and Refine
+- **Test Filters and Interactions**:
+  - Ensure filters (e.g., sentiment, time) work.
+  - Validate network visualization for accuracy and usability.
+- **Optimize Performance**:
+  - Minimize latency in rendering graphs or applying filters.
+  - Handle large datasets by sampling or summarization.
+
+### Step 8: Deployment
+- **Package the Application**:
+  - Use a platform like `Streamlit` or `Dash` to create a deployable app.
+  - Test for cross-platform compatibility (e.g., desktop, mobile).
+- **Host the Dashboard**:
+  - Host the application on a cloud platform (e.g., Heroku, AWS).
+  - Ensure access to the datasets is seamless and secure.
+
+### Step 9: Document and Share
+- **Write Documentation**:
+  - Include steps to set up the environment and use the dashboard.
+  - Provide insights on how users can benefit from the tool.
+- **Publish Insights**:
+  - Highlight interesting trends or patterns discovered during analysis.
+
+### Tools & Technologies Checklist
+1. **Python Libraries**:
+   - `pandas`, `numpy`, `matplotlib` for data processing and basic plots?
+   - `networkx`, `pyvis` for network analysis and visualization.
+   - `plotly` for interactive charts.
+2. **Visualization Framework**:
+   - `Streamlit` for dashboard creation.
 
 ---
 

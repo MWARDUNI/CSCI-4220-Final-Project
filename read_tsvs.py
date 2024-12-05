@@ -82,6 +82,7 @@ class TSVLoader():
 
     def pyvis_visualizer(self, graph: nx.DiGraph, outfile: str = "graph.html"):
         net = Network(notebook=True, directed=True, cdn_resources="in_line")
+        # net = Network(notebook=True, directed=True, cdn_resources="remote")
         for node in graph.nodes:
             net.add_node(node, label=node)
 

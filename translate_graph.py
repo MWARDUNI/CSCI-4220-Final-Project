@@ -1,15 +1,26 @@
 from pyvis.network import Network
 import networkx as nx
 from networkx.algorithms.community import greedy_modularity_communities
-
+import pandas as pd
 
 
 
 def create_graph_from_dataframe(df):
+    required_columns = {'source', 'target', 'sentiment'}
+    if not required_columns.issubset(df.columns):
+        raise ValueError(f"DataFrame must contain the following columns: {required_columns}")
+    
+    # Ensure sentiment column is numeric
+    df['sentiment'] = pd.to_numeric(df['sentiment'], errors='coerce')
+    if df['sentiment'].isnull().any():
+        raise ValueError("Sentiment column contains non-numeric values that could not be converted.")
+    
     graph = nx.DiGraph()
     for _, row in df.iterrows():
         graph.add_edge(row['source'], row['target'], sentiment=row['sentiment'])
     return graph
+
+
 
 
 def calculate_sentiment_score(graph):
@@ -68,7 +79,9 @@ def visualize_communities(graph, communities, out_file='communities.html'):
     net = Network(notebook=True, height='1000px', width='100%',
                   directed=True, neighborhood_highlight=True,
                   select_menu=True, filter_menu=True,
-                  bgcolor='#222222', font_color='white')
+                  bgcolor='#222222', font_color='white',
+                  cdn_resources='in_line'
+                )
 
     net.from_nx(graph)
 
@@ -97,28 +110,60 @@ def calculate_community_sentiment(graph, communities):
 
 
 # pyvis graph visualization
-def visualize_graph(graph, out_file='network.html'):
-    net = Network(notebook=True, height='1000px', width='100%', 
-                  directed=True, neighborhood_highlight=True, 
-                  select_menu=True, filter_menu=True,
-                  bgcolor='#222222', font_color='white')
+# def visualize_graph(graph, out_file='network.html'):
+#     net = Network(notebook=True, height='1000px', width='100%', 
+#                   directed=True, neighborhood_highlight=True, 
+#                   select_menu=True, filter_menu=True,
+#                   bgcolor='#222222', font_color='white')
     
+#     net.from_nx(graph)
+
+#     for node in net.nodes:
+#         node['title'] = node['label']
+#         node['value'] = graph.degree(node['id'])
+#         node['size'] = graph.degree(node['id'])
+#         node['color'] = '#00ff1e'
+
+#     for edge in net.edges:
+#         edge_data = graph.get_edge_data(edge['source'], edge['to'])
+#         if 'sentiment' in edge_data:
+#             edge['sentiment'] = edge_data['sentiment']
+#             edge['color'] = 'green' if edge['sentiment'] > 0 else 'red'
+#             edge['width'] = abs(edge['sentiment']) * 2
+
+#     net.show(out_file)
+
+def visualize_graph(graph, out_file='network.html'):
+    net = Network(
+        notebook=True, height='1000px', width='100%', 
+        directed=True, neighborhood_highlight=True, 
+        select_menu=True, filter_menu=True, 
+        bgcolor='#222222', font_color='white',
+        cdn_resources='in_line'
+    )
+    
+    # Load the graph into Pyvis
     net.from_nx(graph)
 
+    # Customize nodes
     for node in net.nodes:
-        node['title'] = node['label']
+        node['title'] = node.get('label', node['id'])
         node['value'] = graph.degree(node['id'])
         node['size'] = graph.degree(node['id'])
         node['color'] = '#00ff1e'
 
+    # Customize edges
     for edge in net.edges:
-        edge_data = graph.get_edge_data(edge['source'], edge['to'])
-        if 'sentiment' in edge_data:
-            edge['sentiment'] = edge_data['sentiment']
-            edge['color'] = 'green' if edge['sentiment'] > 0 else 'red'
-            edge['width'] = abs(edge['sentiment']) * 2
+        # Get edge data from the NetworkX graph
+        edge_data = graph.get_edge_data(edge['from'], edge['to'], default={})
+        sentiment = edge_data.get('sentiment')
+        if isinstance(sentiment, (int, float)):  # Ensure sentiment is numeric
+            edge['color'] = 'green' if sentiment > 0 else 'red'
+            edge['width'] = abs(sentiment) * 2
 
+    # Save the visualization to an HTML file
     net.show(out_file)
+
 
 
 if __name__ == '__main__':

@@ -35,7 +35,7 @@ class TSVLoader():
 
             reader = csv.reader(file if isinstance(file, str) else file, delimiter="\t")
             for idx, line in enumerate(reader):
-                print(f"Row {idx}: {line}")  # Debug: Print each row
+                # print(f"Row {idx}: {line}")  # Debug: Print each row
                 if idx == 0 or len(line) < 2:  # Skip header and invalid rows
                     continue
                 source = line[0]
@@ -114,5 +114,5 @@ if __name__ == "__main__":
     df_body = tsv_reader.to_dataframe(reddit_body_data)
     
     # Output DataFrame info
-    print(df_title.head(10))
-    print(df_body.head(10))
+    # print(df_title.head(10))
+    # print(df_body.head(10))

@@ -27,22 +27,63 @@ def main():
     
     # File upload
     uploaded_file = st.file_uploader("Upload a TSV file", type=["tsv"])
+
+    # UPLOADS THE ENTIRE DATASET TO THE DF!!
+    # if uploaded_file is not None:
+    #     tsv_reader = TSVLoader()
+    #     reddit_data = tsv_reader.load_data(uploaded_file)
+        
+    #     # Show DataFrame
+    #     df = tsv_reader.to_dataframe(reddit_data)
+    #     st.write("Loaded DataFrame:")
+    #     st.dataframe(df)
+
+    #     # Visualize graph
+    #     if st.button("Generate Graph Visualization"):
+    #         graph = tsv_reader.to_networkx_graph(reddit_data)
+    #         tsv_reader.pyvis_visualizer(graph, "streamlit_graph.html")
+    #         with open("streamlit_graph.html", "r") as f:
+    #             html = f.read()
+    #             st.components.v1.html(html, height=800, scrolling=True)
+
+
+    # UPLOADS ONLY FIRST 10 NODES TO DF!!
     if uploaded_file is not None:
         tsv_reader = TSVLoader()
         reddit_data = tsv_reader.load_data(uploaded_file)
         
-        # Show DataFrame
+        # Convert to DataFrame
         df = tsv_reader.to_dataframe(reddit_data)
-        st.write("Loaded DataFrame:")
-        st.dataframe(df)
         
+        # Display the first 500 rows only
+        st.write("First 500 Nodes in DataFrame:")
+        df_first_500 = df.head(500)
+        st.dataframe(df_first_500)
+
         # Visualize graph
         if st.button("Generate Graph Visualization"):
-            graph = tsv_reader.to_networkx_graph(reddit_data)
+            # Filter the graph data to only include the first 50 nodes
+            filtered_data = {}
+            for index, row in df_first_500.iterrows():
+                source = row["source"]
+                target = row["target"]
+                if source not in filtered_data:
+                    filtered_data[source] = []
+                filtered_data[source].append({
+                    "target": target,
+                    "post_id": row["post_id"],
+                    "ts": row["timestamp"],
+                    "sentiment": row["sentiment"],
+                    "props": {key: row[key] for key in row.index if key not in ["source", "target", "post_id", "timestamp", "sentiment"]}
+                })
+
+            # Generate graph using the filtered data
+            graph = tsv_reader.to_networkx_graph(filtered_data)
             tsv_reader.pyvis_visualizer(graph, "streamlit_graph.html")
             with open("streamlit_graph.html", "r") as f:
                 html = f.read()
                 st.components.v1.html(html, height=800, scrolling=True)
+
 
 if __name__ == "__main__":
     main()

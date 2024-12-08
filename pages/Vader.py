@@ -35,7 +35,8 @@ st.write("(Valence Aware Dictionary and sEntiment Reasoner) model to analyze the
 st.subheader("Input a sentence to analyze sentiment")
 text_input = st.text_area("Enter your text here:")
 
-options = ["Subreddit", "Title", "Body(post)"]
+options = ["Subreddit", "Title", ""]
+selected_option = st.selectbox("Select an option:", options)
 selected_option = st.selectbox("Select an option:", options)
 
 if selected_option == "Subreddit":
@@ -49,7 +50,10 @@ if selected_option == "Title":
 if selected_option == "Body(post)":
     body = st.text_area("Enter the body text:")
     # if body:
+        
 
-
+# averages 1
+# title_average 2
+# body_average 3
 
 st.write(f"Subreddit: {subreddit}")

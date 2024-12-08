@@ -19,20 +19,24 @@ from translate_graph import (
     visualize_graph, 
 )
 
+
+st.set_page_config(layout="wide")
+
+
 def main():
     st.title("Reddit Hyperlink Network Visualization")
     
-    # Dynamically resolve file paths
+    # resolve file paths
     base_dir = os.path.abspath(os.path.dirname(__file__))  # Directory of this script
     post_props_path = os.path.join(base_dir, "props_mapping", "post_props.csv")
     props_map_path = os.path.join(base_dir, "props_mapping", "props_map.csv")
     
-    # Check file existence
+  
     if not os.path.exists(post_props_path):
         st.error(f"File not found: {post_props_path}")
         return
     
-    # Generate props map if needed
+    # generate props map
     if st.button("Generate Props Map"):
         try:
             generate_props_map(post_props_path, props_map_path)
@@ -42,7 +46,7 @@ def main():
         except Exception as e:
             st.error(f"An error occurred while generating the props map: {e}")
     
-    # File upload
+
     uploaded_file = st.file_uploader("Upload a TSV file", type=["tsv"])
 
     # UPLOADS THE ENTIRE DATASET TO THE DF!!
@@ -77,17 +81,18 @@ def main():
             df.loc[:, 'sentiment'] = df['sentiment'].fillna(0)
             return
         
-        
+        # set the number of nodes to display
+        n_nodes = 2000
 
         # display the first 2000 rows
-        st.write("First 2000 Nodes in DataFrame:")
-        df_first_2000 = df.head(2000)
-        st.dataframe(df_first_2000)
+        st.write(f"First {n_nodes} Nodes in DataFrame:")
+        df_n_nodes = df.head(n_nodes)
+        st.dataframe(df_n_nodes)
 
         # graph generation
         if st.button("Analyze and Visualize Graph"):
             
-            graph = create_graph_from_dataframe(df_first_2000)
+            graph = create_graph_from_dataframe(df_n_nodes)
             
             # calc centrality measures
             calculate_centrality_measures(graph)

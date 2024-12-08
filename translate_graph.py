@@ -10,7 +10,7 @@ def create_graph_from_dataframe(df):
     if not required_columns.issubset(df.columns):
         raise ValueError(f"DataFrame must contain the following columns: {required_columns}")
     
-    # Ensure sentiment column is numeric
+    # ensure sentiment column is numeric
     df['sentiment'] = pd.to_numeric(df['sentiment'], errors='coerce')
     if df['sentiment'].isnull().any():
         raise ValueError("Sentiment column contains non-numeric values that could not be converted.")

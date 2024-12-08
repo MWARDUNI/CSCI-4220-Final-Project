@@ -64,53 +64,11 @@ def main():
     #             st.components.v1.html(html, height=800, scrolling=True)
 
 
-    # UPLOADS ONLY FIRST 10 NODES TO DF!!
-    # if uploaded_file is not None:
-    #     tsv_reader = TSVLoader()
-    #     reddit_data = tsv_reader.load_data(uploaded_file)
-        
-    #     # Convert to DataFrame
-    #     df = tsv_reader.to_dataframe(reddit_data)
-        
-    #     # Display the first 500 rows only
-    #     st.write("First 500 Nodes in DataFrame:")
-    #     df_first_500 = df.head(500)
-    #     st.dataframe(df_first_500)
-
-    #     # Visualize graph
-    #     if st.button("Generate Graph Visualization"):
-    #         # Filter the graph data to only include the first 50 nodes
-    #         filtered_data = {}
-    #         for index, row in df_first_500.iterrows():
-    #             source = row["source"]
-    #             target = row["target"]
-    #             if source not in filtered_data:
-    #                 filtered_data[source] = []
-    #             filtered_data[source].append({
-    #                 "target": target,
-    #                 "post_id": row["post_id"],
-    #                 "ts": row["timestamp"],
-    #                 "sentiment": row["sentiment"],
-    #                 "props": {key: row[key] for key in row.index if key not in ["source", "target", "post_id", "timestamp", "sentiment"]}
-    #             })
-
-    #         # Generate graph using the filtered data
-    #         graph = tsv_reader.to_networkx_graph(filtered_data)
-    #         tsv_reader.pyvis_visualizer(graph, "streamlit_graph.html")
-    #         with open("streamlit_graph.html", "r") as f:
-    #             html = f.read()
-    #             st.components.v1.html(html, height=800, scrolling=True)
 
     if uploaded_file is not None:
         tsv_reader = TSVLoader()
         reddit_data = tsv_reader.load_data(uploaded_file)
-        
-        # Convert to DataFrame
-        # df = tsv_reader.to_dataframe(reddit_data)
-        # df['sentiment'] = pd.to_numeric(df['sentiment'], errors='coerce')
-        # if df['sentiment'].isnull().any():
-        #     st.error("The sentiment column contains invalid values. Please clean the data and try again.")
-        #     return
+
         
         df = tsv_reader.to_dataframe(reddit_data)
         df.loc[:, 'sentiment'] = pd.to_numeric(df['sentiment'], errors='coerce')
@@ -119,42 +77,45 @@ def main():
             df.loc[:, 'sentiment'] = df['sentiment'].fillna(0)
             return
         
-        # Display the first 10 rows
-        st.write("First 1000 Nodes in DataFrame:")
-        df_first_1000 = df.head(1000)
-        st.dataframe(df_first_1000)
+        
 
-        # Graph generation
+        # display the first 2000 rows
+        st.write("First 2000 Nodes in DataFrame:")
+        df_first_2000 = df.head(2000)
+        st.dataframe(df_first_2000)
+
+        # graph generation
         if st.button("Analyze and Visualize Graph"):
-            # Create graph from filtered DataFrame
-            graph = create_graph_from_dataframe(df_first_1000)
             
-            # Calculate centrality measures
+            graph = create_graph_from_dataframe(df_first_2000)
+            
+            # calc centrality measures
             calculate_centrality_measures(graph)
+            calculate_degree_centrality(graph)
             
-            # Get top nodes by PageRank
+            # get top nodes by PageRank
             top_nodes = get_top_nodes(graph, 'pagerank')
             st.write("Top Nodes by PageRank:")
             for node, score in top_nodes:
                 st.write(f"{node}: {score}")
             
-            # Identify communities
+            # ID communities
             communities = get_communities(graph)
             st.write(f"Identified {len(communities)} communities.")
             
-            # Community sentiment
+            # community sentiment
             community_sentiment = calculate_community_sentiment(graph, communities)
             st.write("Community Sentiment Scores:")
             for community, sentiment in community_sentiment.items():
                 st.write(f"Community {community}: {sentiment}")
             
-            # Visualize communities
+            # visualize communities
             st.write("Community Visualization:")
             visualize_communities(graph, communities, out_file="communities.html")
             with open("communities.html", "r") as f:
                 st.components.v1.html(f.read(), height=800, scrolling=True)
             
-            # Visualize graph
+            # visualize graph
             st.write("Graph Visualization:")
             visualize_graph(graph, out_file="network.html")
             with open("network.html", "r") as f:

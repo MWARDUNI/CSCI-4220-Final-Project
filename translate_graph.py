@@ -76,7 +76,7 @@ def get_communities(graph):
 
 
 def visualize_communities(graph, communities, out_file='communities.html'):
-    net = Network(notebook=True, height='1000px', width='100%',
+    net = Network(notebook=True, height='2000px', width='100%',
                   directed=True, neighborhood_highlight=True,
                   select_menu=True, filter_menu=True,
                   bgcolor='#222222', font_color='white',
@@ -108,30 +108,37 @@ def calculate_community_sentiment(graph, communities):
         community_sentiment[i] = average_sentiment
     return community_sentiment
 
+def calculate_betweeness_centrality(graph):
+    betweenness_centrality = nx.betweenness_centrality(graph)
+    nx.set_node_attributes(graph, betweenness_centrality, 'betweenness_centrality')
 
-# pyvis graph visualization
-# def visualize_graph(graph, out_file='network.html'):
-#     net = Network(notebook=True, height='1000px', width='100%', 
-#                   directed=True, neighborhood_highlight=True, 
-#                   select_menu=True, filter_menu=True,
-#                   bgcolor='#222222', font_color='white')
-    
-#     net.from_nx(graph)
+def calculate_closeness_centrality(graph):
+    closeness_centrality = nx.closeness_centrality(graph)
+    nx.set_node_attributes(graph, closeness_centrality, 'closeness_centrality')
 
-#     for node in net.nodes:
-#         node['title'] = node['label']
-#         node['value'] = graph.degree(node['id'])
-#         node['size'] = graph.degree(node['id'])
-#         node['color'] = '#00ff1e'
+def calculate_eigenvector_centrality(graph):
+    eigenvector_centrality = nx.eigenvector_centrality(graph)
+    nx.set_node_attributes(graph, eigenvector_centrality, 'eigenvector_centrality')
 
-#     for edge in net.edges:
-#         edge_data = graph.get_edge_data(edge['source'], edge['to'])
-#         if 'sentiment' in edge_data:
-#             edge['sentiment'] = edge_data['sentiment']
-#             edge['color'] = 'green' if edge['sentiment'] > 0 else 'red'
-#             edge['width'] = abs(edge['sentiment']) * 2
+def calculate_pagerank(graph):
+    pagerank = nx.pagerank(graph)
+    nx.set_node_attributes(graph, pagerank, 'pagerank')
 
-#     net.show(out_file)
+def calculate_centrality_measures(graph):
+    calculate_degree_centrality(graph)
+    calculate_betweenness_centrality(graph)
+    calculate_closeness_centrality(graph)
+    calculate_eigenvector_centrality(graph)
+    calculate_pagerank(graph)
+
+def get_top_nodes(graph, measure, top_n=10):
+    centrality_scores = nx.get_node_attributes(graph, measure)
+    sorted_nodes = sorted(centrality_scores.items(), key=lambda x: x[1], reverse=True)
+    return sorted_nodes[:top_n]
+
+def get_communities(graph):
+    return list(greedy_modularity_communities(graph))
+
 
 def visualize_graph(graph, out_file='network.html'):
     net = Network(

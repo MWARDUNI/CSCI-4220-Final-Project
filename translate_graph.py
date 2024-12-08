@@ -21,8 +21,6 @@ def create_graph_from_dataframe(df):
     return graph
 
 
-
-
 def calculate_sentiment_score(graph):
     for node in graph.nodes():
         in_edges = graph.in_edges(node, data=True)

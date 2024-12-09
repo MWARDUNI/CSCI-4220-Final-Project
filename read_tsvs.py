@@ -9,7 +9,7 @@ class TSVLoader():
     def __init__(self) -> None:
         self.prop_map = self._read_prop_map()
         self.test = False
-        self.use_props = False
+        
 
     def _read_prop_map(self) -> list:
         try:
@@ -47,26 +47,14 @@ class TSVLoader():
                 props = line[5] if len(line) > 5 else ""
                 if source not in reddit.keys():
                     reddit[source] = []
-                if self.use_props: # is True
-                    reddit[source].append({
-                        "target": target, 'post_id': post_id, 'ts': ts, 
-                        "sentiment": sentiment,
-                        "props": {self.prop_map[i]: x for i, x in enumerate(props.split(","))}
-                    })
-                else:  # Exclude props if self.use_props is False
-                    reddit[source].append({
-                        "target": target,
-                        "post_id": post_id,
-                        "ts": ts,
-                        "sentiment": sentiment
-                    })
-                if self.test:  # Optional debug output
-                    print(reddit)
-                    break
+                reddit[source].append({
+                    "target": target, 'post_id': post_id, 'ts': ts, 
+                    "sentiment": sentiment,
+                    "props": {self.prop_map[i]: x for i, x in enumerate(props.split(","))}
+                })
         except Exception as e:
             print(f"Error processing file: {e}")
-        if self.test:
-            print(len(reddit))
+        
         return reddit
 
 

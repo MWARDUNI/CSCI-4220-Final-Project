@@ -1,4 +1,5 @@
 import streamlit as st
+import sentiment_extract.get_sentiment as gs
 
 st.markdown("""
     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
@@ -38,21 +39,22 @@ text_input = st.text_area("Enter your text here:")
 options = ["Subreddit", "Title", "Body"]
 selected_option = st.selectbox("Select an option:", options)
 
+if not text_input.strip():
+    st.stop() 
+
 # averages 1
 if selected_option == "Subreddit":
-    subreddit = st.text_input("Enter the subreddit name:")
-    if subreddit:
-        st.write(f"Averages: {averages}")
+    result = gs.main(selection=1, value=text_input)
+    st.text(result)
+
 # title_average 2
 if selected_option == "Title":
-    title = st.text_input("Enter the title:")
-    if title:
-        st.write(f"Title Average: {title_average}")
+    result = gs.main(selection=2, value=text_input)
+    st.text(result)
+
 # body_average 3
 if selected_option == "Body(post)":
-    body = st.text_area("Enter the body text:")
-    if body:
-        st.write(f"Body Average: {body_average}")
+    result = gs.main(selection=3, value=text_input)
+    st.text(result)
 
-
-st.write(f"Subreddit: {subreddit}")
+# st.write(f"Subreddit: {subreddit}")

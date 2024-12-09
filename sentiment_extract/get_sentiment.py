@@ -29,6 +29,7 @@ reddit = praw.Reddit(
 
 sia = SentimentIntensityAnalyzer()
 
+
 def import_title_data():
     # Import the intitial data
 
@@ -268,77 +269,32 @@ def preprocess_text(text):
 
     return text
 
-def user_input():
-    while True:
-        print("\n===Sentiment Analysis Calculator===")
-        print("\n1. Subreddit")
-        print("\n2. Title")
-        print("\n3. Body(post)")
-        print("\n4. Exit")
-        print("\nPlease make a selection: ")
-        input_val = input("\n--->: ")
+def main(selection= None, value=None):
+            value = preprocess_text(value)
 
-        try:
-            selection = int(input_val)
+            if selection == 4:
+                return "Exit"
 
-        except ValueError:
-            print("Invalid input. Please enter a number between 1 and 4.")
-            continue
+            match selection:
+                case 1: 
+                    subreddit_df = choose_subreddit(value)
+                    averages = subreddit_avg_sentiment(subreddit_df)
+                    return averages
+                
+                case 2: 
+                    title_scores = sia.polarity_scores(value)
+                    title_averages = title_sentiment(title_scores, result_df)
+                    return title_averages
 
-        match selection: 
-            case 1: 
-                subreddit_name = preprocess_text(input("Subreddit name: "))
-                return (selection, subreddit_name)
-            
-            case 2: 
-                new_title_name = preprocess_text(input("Title name of post: "))
-                return (selection, new_title_name)
-            
-            case 3: 
-                new_body_post = preprocess_text(input("Enter post: "))
-                return (selection, new_body_post)
-            
-            case 4: 
-                return (selection, None)
-            
-            case _: print("Error.")
+                case 3:
+                    body_scores = sia.polarity_scores(value)
+                    body_averages = body_sentiment(body_scores, result_df_body)
+                    return body_averages
 
-def main():
-    while True:
-        user_selection, value = user_input()
-
-        if user_selection == 4:
-            break
-
-        match user_selection:
-            case 1: 
-                subreddit_df = choose_subreddit(value)
-                averages = subreddit_avg_sentiment(subreddit_df)
-                print(averages)
-                return averages
-            
-            case 2: 
-                title_scores = sia.polarity_scores(value)
-                title_averages = title_sentiment(title_scores, result_df)
-                print(title_averages)
-                return title_averages
-
-            case 3:
-                body_scores = sia.polarity_scores(value)
-                body_averages = body_sentiment(body_scores, result_df_body)
-                print(body_averages)
-                return body_averages
-
-
-def loading():
-    print("\nPlease wait while data is loaded...\n")
+result_df = import_title_data()
+result_df_body = import_body_data()
+model_title, label_encoder_title, top_subreddits_title_source, top_subreddits_title_target = make_title_model()
+model_body, label_encoder_body, top_subreddits_body_source, top_subreddits_body_target = make_body_model()
 
 if __name__ == '__main__':
-    loading()
-
-    result_df = import_title_data()
-    result_df_body = import_body_data()
-    model_title, label_encoder_title, top_subreddits_title_source, top_subreddits_title_target = make_title_model()
-    model_body, label_encoder_body, top_subreddits_body_source, top_subreddits_body_target = make_body_model()
-
     main()
